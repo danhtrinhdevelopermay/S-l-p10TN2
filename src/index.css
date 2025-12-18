@@ -86,6 +86,16 @@ select:focus, input[type="text"]:focus, input[type="date"]:focus, input[type="co
   width: 100%;
   height: auto;
   display: block;
+  filter: grayscale(100%);
+  transition: filter 0.3s ease;
+}
+
+.image-option:hover img {
+  filter: grayscale(0%);
+}
+
+.image-option.selected img {
+  filter: grayscale(0%);
 }
 
 .button-group {

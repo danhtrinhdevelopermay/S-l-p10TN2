@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import DatePicker from './DatePicker'
-import ColorPicker from './ColorPicker'
 
 const STUDENTS = [
   "Trần Văn An",
@@ -51,7 +50,6 @@ export default function App() {
   const [formData, setFormData] = useState({
     name: '',
     birthDate: '',
-    favoriteColor: '#FFD700',
     favoriteAnimal: '',
     selectedImage: ''
   })
@@ -92,7 +90,6 @@ export default function App() {
     setFormData({
       name: '',
       birthDate: '',
-      favoriteColor: '#FFD700',
       favoriteAnimal: '',
       selectedImage: ''
     })
@@ -144,14 +141,6 @@ export default function App() {
           </div>
 
           <div className="form-group">
-            <label>Màu yêu thích:</label>
-            <ColorPicker 
-              value={formData.favoriteColor}
-              onChange={(color) => setFormData({ ...formData, favoriteColor: color })}
-            />
-          </div>
-
-          <div className="form-group">
             <label htmlFor="favoriteAnimal">Con vật yêu thích:</label>
             <input 
               id="favoriteAnimal"
@@ -199,17 +188,6 @@ export default function App() {
           <div className="summary">
             <p><strong>Tên:</strong> {formData.name}</p>
             <p><strong>Ngày sinh:</strong> {formData.birthDate}</p>
-            <p><strong>Màu yêu thích:</strong> 
-              <span style={{
-                display: 'inline-block',
-                width: '20px',
-                height: '20px',
-                backgroundColor: formData.favoriteColor,
-                marginLeft: '10px',
-                borderRadius: '4px',
-                border: '1px solid #ddd'
-              }}></span>
-            </p>
             <p><strong>Con vật yêu thích:</strong> {formData.favoriteAnimal}</p>
             <p><strong>Ảnh được chọn:</strong> Ảnh {formData.selectedImage === 'image1' ? '1' : '2'}</p>
           </div>
