@@ -75,26 +75,22 @@ export default function Admin() {
     
     img.onload = () => {
       const ctx = canvas.getContext('2d')
-      const stripeWidth = 200
-      canvas.width = img.width + stripeWidth
+      canvas.width = img.width
       canvas.height = img.height
       
       // Draw image
       ctx.drawImage(img, 0, 0)
       
-      // Add white stripe on right side
-      ctx.fillStyle = '#FFFFFF'
-      ctx.fillRect(img.width, 0, stripeWidth, canvas.height)
+      // Add text on image (right side)
+      const padding = 30
+      const textX = img.width - 120
+      const textY = img.height / 2 - 30
       
-      // Add text on stripe
+      // Draw name
       ctx.fillStyle = '#000000'
-      ctx.font = 'bold 28px Arial'
-      ctx.textAlign = 'center'
+      ctx.font = 'bold 32px Arial'
+      ctx.textAlign = 'right'
       
-      const stripeCenter = img.width + stripeWidth / 2
-      const textY = canvas.height / 2 - 20
-      
-      // Split name into lines if too long
       const name = sub.name
       const words = name.split(' ')
       let line1 = '', line2 = ''
@@ -106,13 +102,13 @@ export default function Admin() {
         line1 = name
       }
       
-      ctx.fillText(line1, stripeCenter, textY)
+      ctx.fillText(line1, textX, textY)
       if (line2) {
-        ctx.fillText(line2, stripeCenter, textY + 35)
+        ctx.fillText(line2, textX, textY + 40)
+        ctx.fillText(`STT: ${index + 1}`, textX, textY + 90)
+      } else {
+        ctx.fillText(`STT: ${index + 1}`, textX, textY + 50)
       }
-      
-      ctx.font = 'bold 32px Arial'
-      ctx.fillText(`STT: ${index + 1}`, stripeCenter, canvas.height / 2 + 50)
       
       // Download
       const link = document.createElement('a')
