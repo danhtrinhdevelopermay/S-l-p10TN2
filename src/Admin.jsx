@@ -66,6 +66,42 @@ export default function Admin() {
     return `/images/${imageName}.jpg`
   }
 
+  const downloadImage = async (sub, index) => {
+    const canvas = document.createElement('canvas')
+    const img = new Image()
+    
+    img.crossOrigin = 'anonymous'
+    img.src = getImagePath(sub.selected_image)
+    
+    img.onload = () => {
+      const ctx = canvas.getContext('2d')
+      canvas.width = img.width
+      canvas.height = img.height
+      
+      // Draw image
+      ctx.drawImage(img, 0, 0)
+      
+      // Add semi-transparent dark overlay at bottom
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.7)'
+      ctx.fillRect(0, canvas.height - 150, canvas.width, 150)
+      
+      // Add text
+      ctx.fillStyle = '#FFFFFF'
+      ctx.font = 'bold 48px Arial'
+      ctx.textAlign = 'left'
+      ctx.fillText(sub.name, 30, canvas.height - 80)
+      
+      ctx.font = '36px Arial'
+      ctx.fillText(`STT: ${index + 1}`, 30, canvas.height - 25)
+      
+      // Download
+      const link = document.createElement('a')
+      link.href = canvas.toDataURL('image/jpeg', 0.9)
+      link.download = `${sub.name}_STT${index + 1}.jpg`
+      link.click()
+    }
+  }
+
   if (!isAuthenticated) {
     return (
       <div className="container admin-container">
@@ -119,11 +155,15 @@ export default function Admin() {
                 <img src={getImagePath(sub.selected_image)} alt={`Ảnh của ${sub.name}`} className="gallery-image" />
                 <div className="overlay-text">
                   <h3>{sub.name}</h3>
+                  <p><strong>STT:</strong> {index + 1}</p>
                   <p><strong>Ngày sinh:</strong> {formatDate(sub.birth_date)}</p>
                   <p><strong>Con vật yêu thích:</strong> {sub.favorite_animal}</p>
                   <p><strong>Ngày gửi:</strong> {formatDate(sub.created_at)}</p>
                 </div>
               </div>
+              <button className="btn-download" onClick={() => downloadImage(sub, index)}>
+                ⬇ Tải ảnh
+              </button>
             </div>
           ))}
         </div>

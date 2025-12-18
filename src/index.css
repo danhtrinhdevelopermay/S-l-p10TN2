@@ -562,6 +562,25 @@ button {
   text-decoration: underline;
 }
 
+.btn-download {
+  width: 100%;
+  padding: 12px;
+  background-color: #667eea;
+  color: white;
+  border: none;
+  border-radius: 0 0 12px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  border-top: 1px solid #ddd;
+}
+
+.btn-download:hover {
+  background-color: #5568d3;
+  transform: translateY(-2px);
+}
+
 input[type="password"] {
   width: 100%;
   padding: 12px;
