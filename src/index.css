@@ -696,6 +696,17 @@ button {
   margin-bottom: 20px;
 }
 
+.number-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  text-align: center;
+}
+
 input[type="password"] {
   width: 100%;
   padding: 12px;

@@ -232,43 +232,39 @@ export default function Admin() {
 
           <div className="settings-grid">
             <div className="settings-group">
-              <label>Vị trí ngang (X): {textSettings.offsetX}</label>
+              <label>Vị trí ngang (X):</label>
               <input 
-                type="range" 
-                min="-300" 
-                max="0" 
+                type="number" 
                 value={textSettings.offsetX}
-                onChange={(e) => setTextSettings({...textSettings, offsetX: parseInt(e.target.value)})}
+                onChange={(e) => setTextSettings({...textSettings, offsetX: parseInt(e.target.value) || 0})}
+                className="number-input"
               />
             </div>
             <div className="settings-group">
-              <label>Vị trí dọc (Y): {textSettings.offsetY}px</label>
+              <label>Vị trí dọc (Y):</label>
               <input 
-                type="range" 
-                min="50" 
-                max="400" 
+                type="number" 
                 value={textSettings.offsetY}
-                onChange={(e) => setTextSettings({...textSettings, offsetY: parseInt(e.target.value)})}
+                onChange={(e) => setTextSettings({...textSettings, offsetY: parseInt(e.target.value) || 0})}
+                className="number-input"
               />
             </div>
             <div className="settings-group">
-              <label>Kích thước chữ - Tên: {textSettings.nameFontSize}px</label>
+              <label>Kích thước chữ - Tên (px):</label>
               <input 
-                type="range" 
-                min="16" 
-                max="64" 
+                type="number" 
                 value={textSettings.nameFontSize}
-                onChange={(e) => setTextSettings({...textSettings, nameFontSize: parseInt(e.target.value)})}
+                onChange={(e) => setTextSettings({...textSettings, nameFontSize: parseInt(e.target.value) || 1})}
+                className="number-input"
               />
             </div>
             <div className="settings-group">
-              <label>Kích thước chữ - STT: {textSettings.sttFontSize}px</label>
+              <label>Kích thước chữ - STT (px):</label>
               <input 
-                type="range" 
-                min="16" 
-                max="64" 
+                type="number" 
                 value={textSettings.sttFontSize}
-                onChange={(e) => setTextSettings({...textSettings, sttFontSize: parseInt(e.target.value)})}
+                onChange={(e) => setTextSettings({...textSettings, sttFontSize: parseInt(e.target.value) || 1})}
+                className="number-input"
               />
             </div>
           </div>
