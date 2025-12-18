@@ -6,6 +6,24 @@ export default function Admin() {
   const [submissions, setSubmissions] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [showSettings, setShowSettings] = useState(false)
+  const [textSettings, setTextSettings] = useState({
+    offsetX: -120,
+    offsetY: -30,
+    fontSize: 32
+  })
+
+  useEffect(() => {
+    const saved = localStorage.getItem('textSettings')
+    if (saved) {
+      setTextSettings(JSON.parse(saved))
+    }
+  }, [])
+
+  const saveSettings = () => {
+    localStorage.setItem('textSettings', JSON.stringify(textSettings))
+    alert('Cài đặt đã được lưu!')
+  }
 
   const handleLogin = async () => {
     setError('')
@@ -81,14 +99,13 @@ export default function Admin() {
       // Draw image
       ctx.drawImage(img, 0, 0)
       
-      // Add text on image (right side)
-      const padding = 30
-      const textX = img.width - 120
-      const textY = img.height / 2 - 30
+      // Add text on image (using saved settings)
+      const textX = img.width + textSettings.offsetX
+      const textY = img.height / 2 + textSettings.offsetY
       
       // Draw name
       ctx.fillStyle = '#000000'
-      ctx.font = 'bold 32px Arial'
+      ctx.font = `bold ${textSettings.fontSize}px Arial`
       ctx.textAlign = 'right'
       
       const name = sub.name
@@ -150,6 +167,9 @@ export default function Admin() {
       <div className="admin-header">
         <h1>Danh Sách Thông Tin Học Sinh</h1>
         <div className="admin-actions">
+          <button className="btn-settings" onClick={() => setShowSettings(!showSettings)}>
+            ⚙ Cài đặt
+          </button>
           <button className="btn-export" onClick={handleExport}>
             Xuất CSV
           </button>
@@ -158,6 +178,45 @@ export default function Admin() {
           </button>
         </div>
       </div>
+
+      {showSettings && (
+        <div className="settings-panel">
+          <h3>Cài đặt vị trí chữ</h3>
+          <div className="settings-group">
+            <label>Vị trí ngang (X): {textSettings.offsetX}</label>
+            <input 
+              type="range" 
+              min="-300" 
+              max="0" 
+              value={textSettings.offsetX}
+              onChange={(e) => setTextSettings({...textSettings, offsetX: parseInt(e.target.value)})}
+            />
+          </div>
+          <div className="settings-group">
+            <label>Vị trí dọc (Y): {textSettings.offsetY}</label>
+            <input 
+              type="range" 
+              min="-100" 
+              max="100" 
+              value={textSettings.offsetY}
+              onChange={(e) => setTextSettings({...textSettings, offsetY: parseInt(e.target.value)})}
+            />
+          </div>
+          <div className="settings-group">
+            <label>Kích thước chữ: {textSettings.fontSize}px</label>
+            <input 
+              type="range" 
+              min="16" 
+              max="64" 
+              value={textSettings.fontSize}
+              onChange={(e) => setTextSettings({...textSettings, fontSize: parseInt(e.target.value)})}
+            />
+          </div>
+          <button className="btn-save-settings" onClick={saveSettings}>
+            💾 Lưu cài đặt
+          </button>
+        </div>
+      )}
 
       <p className="submission-count">Tổng số: {submissions.length} phản hồi</p>
 
