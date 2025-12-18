@@ -126,55 +126,64 @@ export default function Admin() {
   }
 
   const downloadImage = async (sub) => {
-    const canvas = document.createElement('canvas')
-    const img = new Image()
-    
-    img.crossOrigin = 'anonymous'
-    img.src = getImagePath(sub.selected_image)
-    
-    img.onload = () => {
-      const ctx = canvas.getContext('2d')
-      canvas.width = img.width
-      canvas.height = img.height
+    try {
+      const canvas = document.createElement('canvas')
+      const img = new Image()
       
-      // Draw image
-      ctx.drawImage(img, 0, 0)
+      img.crossOrigin = 'anonymous'
+      img.src = getImagePath(sub.selected_image)
       
-      // Add text on image (using saved settings)
-      const textX = img.width + textSettings.offsetX
-      const textY = textSettings.offsetY
-      
-      // Draw name
-      ctx.fillStyle = '#000000'
-      ctx.font = `bold ${textSettings.nameFontSize}px Arial`
-      ctx.textAlign = 'right'
-      
-      const name = sub.name
-      const words = name.split(' ')
-      let line1 = '', line2 = ''
-      
-      if (words.length > 2) {
-        line1 = words.slice(0, Math.ceil(words.length / 2)).join(' ')
-        line2 = words.slice(Math.ceil(words.length / 2)).join(' ')
-      } else {
-        line1 = name
+      img.onload = () => {
+        const ctx = canvas.getContext('2d')
+        canvas.width = img.width
+        canvas.height = img.height
+        
+        // Draw image
+        ctx.drawImage(img, 0, 0)
+        
+        // Add text on image (using saved settings)
+        const textX = img.width + textSettings.offsetX
+        const textY = textSettings.offsetY
+        
+        // Draw name
+        ctx.fillStyle = '#000000'
+        ctx.font = `bold ${textSettings.nameFontSize}px Arial`
+        ctx.textAlign = 'right'
+        
+        const name = sub.name || 'Unknown'
+        const words = name.split(' ')
+        let line1 = '', line2 = ''
+        
+        if (words.length > 2) {
+          line1 = words.slice(0, Math.ceil(words.length / 2)).join(' ')
+          line2 = words.slice(Math.ceil(words.length / 2)).join(' ')
+        } else {
+          line1 = name
+        }
+        
+        ctx.fillText(line1, textX, textY)
+        if (line2) {
+          ctx.fillText(line2, textX, textY + (textSettings.nameFontSize * 1.2))
+          ctx.font = `bold ${textSettings.sttFontSize}px Arial`
+          ctx.fillText(`STT: ${sub.stt || '?'}`, textX, textY + (textSettings.nameFontSize * 2.4))
+        } else {
+          ctx.font = `bold ${textSettings.sttFontSize}px Arial`
+          ctx.fillText(`STT: ${sub.stt || '?'}`, textX, textY + (textSettings.nameFontSize * 1.2))
+        }
+        
+        // Download
+        const link = document.createElement('a')
+        link.href = canvas.toDataURL('image/jpeg', 0.9)
+        link.download = `${name}_STT${sub.stt || 'unknown'}.jpg`
+        link.click()
       }
       
-      ctx.fillText(line1, textX, textY)
-      if (line2) {
-        ctx.fillText(line2, textX, textY + (textSettings.nameFontSize * 1.2))
-        ctx.font = `bold ${textSettings.sttFontSize}px Arial`
-        ctx.fillText(`STT: ${sub.stt}`, textX, textY + (textSettings.nameFontSize * 2.4))
-      } else {
-        ctx.font = `bold ${textSettings.sttFontSize}px Arial`
-        ctx.fillText(`STT: ${sub.stt}`, textX, textY + (textSettings.nameFontSize * 1.2))
+      img.onerror = () => {
+        alert('Lỗi tải ảnh. Vui lòng thử lại.')
       }
-      
-      // Download
-      const link = document.createElement('a')
-      link.href = canvas.toDataURL('image/jpeg', 0.9)
-      link.download = `${sub.name}_STT${sub.stt}.jpg`
-      link.click()
+    } catch (error) {
+      console.error('Error downloading image:', error)
+      alert('Lỗi tải ảnh: ' + error.message)
     }
   }
 
