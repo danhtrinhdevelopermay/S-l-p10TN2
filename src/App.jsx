@@ -76,13 +76,30 @@ export default function App() {
     setFormData({ ...formData, selectedImage: imageName })
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!formData.birthDate || !formData.favoriteAnimal || !formData.selectedImage) {
       alert('Vui lòng điền đầy đủ thông tin')
       return
     }
-    setSubmitted(true)
-    console.log('Form submitted:', formData)
+    
+    try {
+      const response = await fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      })
+      
+      const data = await response.json()
+      
+      if (data.success) {
+        setSubmitted(true)
+      } else {
+        alert('Có lỗi xảy ra khi gửi dữ liệu')
+      }
+    } catch (error) {
+      console.error('Error:', error)
+      alert('Có lỗi xảy ra khi gửi dữ liệu')
+    }
   }
 
   const handleReset = () => {
