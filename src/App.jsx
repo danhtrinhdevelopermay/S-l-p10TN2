@@ -63,7 +63,7 @@ export default function App() {
   }, [])
 
   const handleNameChange = (e) => {
-    setFormData({ ...formData, studentId: e.target.value })
+    setFormData({ ...formData, studentId: parseInt(e.target.value) || '' })
   }
 
   const handleStep1Submit = () => {
@@ -84,7 +84,7 @@ export default function App() {
   }
 
   const handleSubmit = async () => {
-    if (!formData.birthDate || !formData.favoriteAnimal || !formData.selectedImage) {
+    if (!formData.studentId || !formData.birthDate || !formData.favoriteAnimal || !formData.selectedImage) {
       alert('Vui lòng điền đầy đủ thông tin')
       return
     }
@@ -93,7 +93,12 @@ export default function App() {
       const response = await fetch('/api/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          studentId: parseInt(formData.studentId),
+          birthDate: formData.birthDate,
+          favoriteAnimal: formData.favoriteAnimal,
+          selectedImage: formData.selectedImage
+        })
       })
       
       const data = await response.json()
