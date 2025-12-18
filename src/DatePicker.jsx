@@ -74,8 +74,10 @@ export default function DatePicker({ value, onChange }) {
       </div>
 
       {showCalendar && (
-        <div className="calendar-popup">
-          <div className="calendar-content">
+        <>
+          <div className="calendar-backdrop" onClick={() => setShowCalendar(false)}></div>
+          <div className="calendar-popup">
+            <div className="calendar-content">
             <div className="calendar-controls">
               <select className="year-input" value={currentDate.getFullYear()} onChange={handleYearChange}>
                 {years.map(year => (
@@ -122,6 +124,7 @@ export default function DatePicker({ value, onChange }) {
             <button className="close-btn" onClick={() => setShowCalendar(false)}>Xong</button>
           </div>
         </div>
+        </>
       )}
     </div>
   )
