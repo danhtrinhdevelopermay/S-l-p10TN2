@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import DatePicker from './DatePicker'
 
 const STUDENTS = [
   "Trần Văn An",
@@ -134,13 +135,10 @@ export default function App() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="birthDate">Ngày sinh:</label>
-            <input 
-              id="birthDate"
-              type="date" 
-              name="birthDate"
+            <label>Ngày sinh:</label>
+            <DatePicker 
               value={formData.birthDate}
-              onChange={handleInputChange}
+              onChange={(date) => setFormData({ ...formData, birthDate: date })}
             />
           </div>
 
