@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import DatePicker from './DatePicker'
+import ColorPicker from './ColorPicker'
 
 const STUDENTS = [
   "Trần Văn An",
@@ -50,7 +51,7 @@ export default function App() {
   const [formData, setFormData] = useState({
     name: '',
     birthDate: '',
-    favoriteColor: '#667eea',
+    favoriteColor: '#FFD700',
     favoriteAnimal: '',
     selectedImage: ''
   })
@@ -91,7 +92,7 @@ export default function App() {
     setFormData({
       name: '',
       birthDate: '',
-      favoriteColor: '#667eea',
+      favoriteColor: '#FFD700',
       favoriteAnimal: '',
       selectedImage: ''
     })
@@ -143,13 +144,10 @@ export default function App() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="favoriteColor">Màu yêu thích:</label>
-            <input 
-              id="favoriteColor"
-              type="color" 
-              name="favoriteColor"
+            <label>Màu yêu thích:</label>
+            <ColorPicker 
               value={formData.favoriteColor}
-              onChange={handleInputChange}
+              onChange={(color) => setFormData({ ...formData, favoriteColor: color })}
             />
           </div>
 
