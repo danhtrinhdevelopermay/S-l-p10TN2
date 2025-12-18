@@ -53,7 +53,7 @@ export default function Admin() {
       ctx.fillStyle = '#000000'
       ctx.font = `bold ${textSettings.nameFontSize}px Arial`
       ctx.textAlign = 'right'
-      ctx.fillText('Danh Trình', textX, textY)
+      ctx.fillText(submissions[0].name || 'Unknown', textX, textY)
 
       // Draw STT
       ctx.font = `bold ${textSettings.sttFontSize}px Arial`

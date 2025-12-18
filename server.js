@@ -14,7 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 const pool = new pg.Pool({
-  connectionString: 'postgresql://postgres:password@helium/heliumdb?sslmode=disable'
+  connectionString: process.env.DATABASE_URL
 });
 
 app.get('/api/students', async (req, res) => {
