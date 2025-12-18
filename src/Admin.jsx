@@ -63,8 +63,7 @@ export default function Admin() {
   }
 
   const getImagePath = (imageName) => {
-    const ext = imageName === 'image2' || imageName === 'image4' || imageName === 'image6' ? 'jpg' : 'png'
-    return `/images/${imageName}.${ext}`
+    return `/images/${imageName}.jpg`
   }
 
   if (!isAuthenticated) {

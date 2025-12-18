@@ -178,7 +178,7 @@ export default function App() {
                   className={`image-option ${formData.selectedImage === img ? 'selected' : ''}`}
                   onClick={() => handleImageSelect(img)}
                 >
-                  <img src={`/images/${img}.${img === 'image2' || img === 'image4' || img === 'image6' ? 'jpg' : 'png'}`} alt={`Ảnh ${idx + 1}`} />
+                  <img src={`/images/${img}.jpg`} alt={`Ảnh ${idx + 1}`} />
                 </div>
               ))}
             </div>
@@ -203,7 +203,7 @@ export default function App() {
             <p><strong>Tên:</strong> {formData.name}</p>
             <p><strong>Ngày sinh:</strong> {formData.birthDate}</p>
             <p><strong>Con vật yêu thích:</strong> {formData.favoriteAnimal}</p>
-            <p><strong>Ảnh được chọn:</strong> Ảnh {formData.selectedImage === 'image1' ? '1' : '2'}</p>
+            <p><strong>Ảnh được chọn:</strong> {formData.selectedImage ? `Ảnh ${['image1', 'image2', 'image3', 'image4', 'image5', 'image6'].indexOf(formData.selectedImage) + 1}` : 'Không xác định'}</p>
           </div>
           <div className="button-group">
             <button className="btn-next" onClick={handleReset}>
