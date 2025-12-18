@@ -14,7 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 const pool = new pg.Pool({
-  connectionString: process.env.DATABASE_URL
+  connectionString: 'postgresql://postgres:password@helium/heliumdb?sslmode=disable'
 });
 
 app.post('/api/submit', async (req, res) => {
