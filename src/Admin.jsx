@@ -57,7 +57,7 @@ export default function Admin() {
 
       // Draw STT
       ctx.font = `bold ${textSettings.sttFontSize}px Arial`
-      ctx.fillText('STT: 1', textX, textY + 50)
+      ctx.fillText(`STT: ${submissions[0].id}`, textX, textY + 50)
     }
   }
 
@@ -125,7 +125,7 @@ export default function Admin() {
     return `/images/${imageName}.jpg`
   }
 
-  const downloadImage = async (sub, index) => {
+  const downloadImage = async (sub) => {
     const canvas = document.createElement('canvas')
     const img = new Image()
     
@@ -164,16 +164,16 @@ export default function Admin() {
       if (line2) {
         ctx.fillText(line2, textX, textY + (textSettings.nameFontSize * 1.2))
         ctx.font = `bold ${textSettings.sttFontSize}px Arial`
-        ctx.fillText(`STT: ${index + 1}`, textX, textY + (textSettings.nameFontSize * 2.4))
+        ctx.fillText(`STT: ${sub.id}`, textX, textY + (textSettings.nameFontSize * 2.4))
       } else {
         ctx.font = `bold ${textSettings.sttFontSize}px Arial`
-        ctx.fillText(`STT: ${index + 1}`, textX, textY + (textSettings.nameFontSize * 1.2))
+        ctx.fillText(`STT: ${sub.id}`, textX, textY + (textSettings.nameFontSize * 1.2))
       }
       
       // Download
       const link = document.createElement('a')
       link.href = canvas.toDataURL('image/jpeg', 0.9)
-      link.download = `${sub.name}_STT${index + 1}.jpg`
+      link.download = `${sub.name}_STT${sub.id}.jpg`
       link.click()
     }
   }
@@ -287,13 +287,13 @@ export default function Admin() {
                 <img src={getImagePath(sub.selected_image)} alt={`Ảnh của ${sub.name}`} className="gallery-image" />
                 <div className="overlay-text">
                   <h3>{sub.name}</h3>
-                  <p><strong>STT:</strong> {index + 1}</p>
+                  <p><strong>STT:</strong> {sub.id}</p>
                   <p><strong>Ngày sinh:</strong> {formatDate(sub.birth_date)}</p>
                   <p><strong>Con vật yêu thích:</strong> {sub.favorite_animal}</p>
                   <p><strong>Ngày gửi:</strong> {formatDate(sub.created_at)}</p>
                 </div>
               </div>
-              <button className="btn-download" onClick={() => downloadImage(sub, index)}>
+              <button className="btn-download" onClick={() => downloadImage(sub)}>
                 ⬇ Tải ảnh
               </button>
             </div>
