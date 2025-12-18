@@ -86,7 +86,18 @@ app.get('/api/admin/export', async (req, res) => {
   }
 });
 
+// Add cache-busting headers for images
+app.use((req, res, next) => {
+  if (req.path.includes('/images/')) {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+  }
+  next();
+});
+
 app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/{*splat}', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
