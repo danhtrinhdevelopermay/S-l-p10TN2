@@ -75,24 +75,44 @@ export default function Admin() {
     
     img.onload = () => {
       const ctx = canvas.getContext('2d')
-      canvas.width = img.width
+      const stripeWidth = 200
+      canvas.width = img.width + stripeWidth
       canvas.height = img.height
       
       // Draw image
       ctx.drawImage(img, 0, 0)
       
-      // Add semi-transparent dark overlay at bottom
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.7)'
-      ctx.fillRect(0, canvas.height - 150, canvas.width, 150)
-      
-      // Add text
+      // Add white stripe on right side
       ctx.fillStyle = '#FFFFFF'
-      ctx.font = 'bold 48px Arial'
-      ctx.textAlign = 'left'
-      ctx.fillText(sub.name, 30, canvas.height - 80)
+      ctx.fillRect(img.width, 0, stripeWidth, canvas.height)
       
-      ctx.font = '36px Arial'
-      ctx.fillText(`STT: ${index + 1}`, 30, canvas.height - 25)
+      // Add text on stripe
+      ctx.fillStyle = '#000000'
+      ctx.font = 'bold 28px Arial'
+      ctx.textAlign = 'center'
+      
+      const stripeCenter = img.width + stripeWidth / 2
+      const textY = canvas.height / 2 - 20
+      
+      // Split name into lines if too long
+      const name = sub.name
+      const words = name.split(' ')
+      let line1 = '', line2 = ''
+      
+      if (words.length > 2) {
+        line1 = words.slice(0, Math.ceil(words.length / 2)).join(' ')
+        line2 = words.slice(Math.ceil(words.length / 2)).join(' ')
+      } else {
+        line1 = name
+      }
+      
+      ctx.fillText(line1, stripeCenter, textY)
+      if (line2) {
+        ctx.fillText(line2, stripeCenter, textY + 35)
+      }
+      
+      ctx.font = 'bold 32px Arial'
+      ctx.fillText(`STT: ${index + 1}`, stripeCenter, canvas.height / 2 + 50)
       
       // Download
       const link = document.createElement('a')
