@@ -62,6 +62,11 @@ export default function Admin() {
     return date.toLocaleDateString('vi-VN')
   }
 
+  const getImagePath = (imageName) => {
+    const ext = imageName === 'image2' || imageName === 'image4' || imageName === 'image6' ? 'jpg' : 'png'
+    return `/images/${imageName}.${ext}`
+  }
+
   if (!isAuthenticated) {
     return (
       <div className="container admin-container">
@@ -108,31 +113,20 @@ export default function Admin() {
       {submissions.length === 0 ? (
         <p className="no-data">Chưa có dữ liệu</p>
       ) : (
-        <div className="table-wrapper">
-          <table className="submissions-table">
-            <thead>
-              <tr>
-                <th>STT</th>
-                <th>Tên</th>
-                <th>Ngày sinh</th>
-                <th>Con vật yêu thích</th>
-                <th>Ảnh chọn</th>
-                <th>Ngày gửi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {submissions.map((sub, index) => (
-                <tr key={sub.id}>
-                  <td>{index + 1}</td>
-                  <td>{sub.name}</td>
-                  <td>{formatDate(sub.birth_date)}</td>
-                  <td>{sub.favorite_animal}</td>
-                  <td>Ảnh {sub.selected_image === 'image1' ? '1' : '2'}</td>
-                  <td>{formatDate(sub.created_at)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="submissions-gallery">
+          {submissions.map((sub, index) => (
+            <div key={sub.id} className="submission-card">
+              <div className="image-overlay-container">
+                <img src={getImagePath(sub.selected_image)} alt={`Ảnh của ${sub.name}`} className="gallery-image" />
+                <div className="overlay-text">
+                  <h3>{sub.name}</h3>
+                  <p><strong>Ngày sinh:</strong> {formatDate(sub.birth_date)}</p>
+                  <p><strong>Con vật yêu thích:</strong> {sub.favorite_animal}</p>
+                  <p><strong>Ngày gửi:</strong> {formatDate(sub.created_at)}</p>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>

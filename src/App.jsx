@@ -172,18 +172,15 @@ export default function App() {
           <div className="form-group">
             <label>Chọn một ảnh:</label>
             <div className="image-selection">
-              <div 
-                className={`image-option ${formData.selectedImage === 'image1' ? 'selected' : ''}`}
-                onClick={() => handleImageSelect('image1')}
-              >
-                <img src="/images/image1.png" alt="Ảnh 1 - Những chú mèo dễ thương" />
-              </div>
-              <div 
-                className={`image-option ${formData.selectedImage === 'image2' ? 'selected' : ''}`}
-                onClick={() => handleImageSelect('image2')}
-              >
-                <img src="/images/image2.jpg" alt="Ảnh 2 - Sư Sư Nguyễn Bảo Trân" />
-              </div>
+              {['image1', 'image2', 'image3', 'image4', 'image5', 'image6'].map((img, idx) => (
+                <div 
+                  key={img}
+                  className={`image-option ${formData.selectedImage === img ? 'selected' : ''}`}
+                  onClick={() => handleImageSelect(img)}
+                >
+                  <img src={`/images/${img}.${img === 'image2' || img === 'image4' || img === 'image6' ? 'jpg' : 'png'}`} alt={`Ảnh ${idx + 1}`} />
+                </div>
+              ))}
             </div>
           </div>
 
