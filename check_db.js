@@ -1,7 +1,7 @@
 import pg from 'pg';
 
 const pool = new pg.Pool({
-  connectionString: 'psql 'postgresql://neondb_owner:npg_YC9ny1UrXjoZ@ep-broad-dawn-a1w7u6e6-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require''
+  connectionString: 'postgresql://neondb_owner:npg_YC9ny1UrXjoZ@ep-broad-dawn-a1w7u6e6-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
 });
 
 async function checkDB() {
