@@ -16,9 +16,12 @@ export default function DatePicker({ value, onChange }) {
     return new Date(date.getFullYear(), date.getMonth(), 1).getDay()
   }
 
+  const formatDateToString = (year, month, day) => {
+    return `${year}-${(month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`
+  }
+
   const handleSelectDay = (day) => {
-    const selected = new Date(currentDate.getFullYear(), currentDate.getMonth(), day)
-    const dateString = selected.toISOString().split('T')[0]
+    const dateString = formatDateToString(currentDate.getFullYear(), currentDate.getMonth(), day)
     onChange(dateString)
     setShowCalendar(false)
   }
@@ -108,7 +111,7 @@ export default function DatePicker({ value, onChange }) {
                   <div key={index}>
                     {day ? (
                       <button
-                        className={`day-cell ${value === new Date(currentDate.getFullYear(), currentDate.getMonth(), day).toISOString().split('T')[0] ? 'active' : ''}`}
+                        className={`day-cell ${value === formatDateToString(currentDate.getFullYear(), currentDate.getMonth(), day) ? 'active' : ''}`}
                         onClick={() => handleSelectDay(day)}
                       >
                         {day}
