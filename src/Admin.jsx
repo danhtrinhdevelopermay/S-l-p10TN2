@@ -9,7 +9,7 @@ export default function Admin() {
   const [showSettings, setShowSettings] = useState(false)
   const [textSettings, setTextSettings] = useState({
     offsetX: -120,
-    offsetY: -30,
+    offsetY: 150,
     fontSize: 32
   })
 
@@ -101,7 +101,7 @@ export default function Admin() {
       
       // Add text on image (using saved settings)
       const textX = img.width + textSettings.offsetX
-      const textY = img.height / 2 + textSettings.offsetY
+      const textY = textSettings.offsetY
       
       // Draw name
       ctx.fillStyle = '#000000'
@@ -193,11 +193,11 @@ export default function Admin() {
             />
           </div>
           <div className="settings-group">
-            <label>Vị trí dọc (Y): {textSettings.offsetY}</label>
+            <label>Vị trí dọc từ trên (Y): {textSettings.offsetY}px</label>
             <input 
               type="range" 
-              min="-100" 
-              max="100" 
+              min="50" 
+              max="400" 
               value={textSettings.offsetY}
               onChange={(e) => setTextSettings({...textSettings, offsetY: parseInt(e.target.value)})}
             />
