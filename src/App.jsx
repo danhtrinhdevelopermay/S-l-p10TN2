@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import DatePicker from './DatePicker'
 
 const STUDENTS = [
@@ -47,20 +47,27 @@ const STUDENTS = [
 
 export default function App() {
   const [step, setStep] = useState(1)
+  const [students, setStudents] = useState([])
   const [formData, setFormData] = useState({
-    name: '',
+    studentId: '',
     birthDate: '',
     favoriteAnimal: '',
     selectedImage: ''
   })
   const [submitted, setSubmitted] = useState(false)
 
+  useEffect(() => {
+    fetch('/api/students')
+      .then(r => r.json())
+      .then(d => setStudents(d.data || []))
+  }, [])
+
   const handleNameChange = (e) => {
-    setFormData({ ...formData, name: e.target.value })
+    setFormData({ ...formData, studentId: e.target.value })
   }
 
   const handleStep1Submit = () => {
-    if (formData.name) {
+    if (formData.studentId) {
       setStep(2)
     } else {
       alert('Vui lòng chọn tên của bạn')
@@ -105,7 +112,7 @@ export default function App() {
   const handleReset = () => {
     setStep(1)
     setFormData({
-      name: '',
+      studentId: '',
       birthDate: '',
       favoriteAnimal: '',
       selectedImage: ''
@@ -122,13 +129,13 @@ export default function App() {
             <label htmlFor="name">Danh sách học sinh:</label>
             <select 
               id="name"
-              value={formData.name} 
+              value={formData.studentId} 
               onChange={handleNameChange}
             >
               <option value="">-- Chọn tên --</option>
-              {STUDENTS.map((student) => (
-                <option key={student} value={student}>
-                  {student}
+              {students.map((student) => (
+                <option key={student.id} value={student.id}>
+                  {student.stt}. {student.name}
                 </option>
               ))}
             </select>
