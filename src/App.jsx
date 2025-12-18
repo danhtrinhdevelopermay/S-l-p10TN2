@@ -63,7 +63,9 @@ export default function App() {
   }, [])
 
   const handleNameChange = (e) => {
-    setFormData({ ...formData, studentId: parseInt(e.target.value) || '' })
+    const value = e.target.value
+    console.log('Selected student:', value, 'Type:', typeof value)
+    setFormData({ ...formData, studentId: value })
   }
 
   const handleStep1Submit = () => {
@@ -89,16 +91,19 @@ export default function App() {
       return
     }
     
+    const payload = {
+      studentId: formData.studentId,
+      birthDate: formData.birthDate,
+      favoriteAnimal: formData.favoriteAnimal,
+      selectedImage: formData.selectedImage
+    }
+    console.log('Submitting:', payload)
+    
     try {
       const response = await fetch('/api/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          studentId: parseInt(formData.studentId),
-          birthDate: formData.birthDate,
-          favoriteAnimal: formData.favoriteAnimal,
-          selectedImage: formData.selectedImage
-        })
+        body: JSON.stringify(payload)
       })
       
       const data = await response.json()

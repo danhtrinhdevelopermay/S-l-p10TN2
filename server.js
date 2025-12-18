@@ -30,10 +30,16 @@ app.get('/api/students', async (req, res) => {
 app.post('/api/submit', async (req, res) => {
   try {
     const { studentId, birthDate, favoriteAnimal, selectedImage } = req.body;
+    console.log('Received submit:', { studentId, birthDate, favoriteAnimal, selectedImage });
+    
+    const parsedStudentId = parseInt(studentId, 10);
+    if (isNaN(parsedStudentId)) {
+      return res.status(400).json({ success: false, error: 'Invalid studentId' });
+    }
     
     const result = await pool.query(
       'INSERT INTO submissions (student_id, birth_date, favorite_animal, selected_image) VALUES ($1, $2, $3, $4) RETURNING *',
-      [studentId, birthDate, favoriteAnimal, selectedImage]
+      [parsedStudentId, birthDate, favoriteAnimal, selectedImage]
     );
     
     res.json({ success: true, data: result.rows[0] });
@@ -67,7 +73,7 @@ app.get('/api/admin/submissions', async (req, res) => {
       SELECT s.*, st.stt, st.name 
       FROM submissions s 
       LEFT JOIN students st ON s.student_id = st.id 
-      ORDER BY st.stt
+      ORDER BY st.stt NULLS LAST, s.created_at DESC
     `);
     res.json({ success: true, data: result.rows });
   } catch (error) {
