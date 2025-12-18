@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 export default function Admin() {
   const [password, setPassword] = useState('')
@@ -10,8 +10,10 @@ export default function Admin() {
   const [textSettings, setTextSettings] = useState({
     offsetX: -120,
     offsetY: 150,
-    fontSize: 32
+    nameFontSize: 32,
+    sttFontSize: 32
   })
+  const canvasRef = useRef(null)
 
   useEffect(() => {
     const saved = localStorage.getItem('textSettings')
@@ -19,6 +21,45 @@ export default function Admin() {
       setTextSettings(JSON.parse(saved))
     }
   }, [])
+
+  useEffect(() => {
+    if (showSettings && canvasRef.current && submissions.length > 0) {
+      drawPreview()
+    }
+  }, [textSettings, showSettings, submissions])
+
+  const drawPreview = () => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const previewImg = new Image()
+    previewImg.crossOrigin = 'anonymous'
+    previewImg.src = `/images/${submissions[0].selected_image}.jpg`
+    
+    previewImg.onload = () => {
+      const ctx = canvas.getContext('2d')
+      const maxWidth = 500
+      const scale = maxWidth / previewImg.width
+      canvas.width = previewImg.width * scale
+      canvas.height = previewImg.height * scale
+
+      ctx.scale(scale, scale)
+      ctx.drawImage(previewImg, 0, 0)
+
+      const textX = previewImg.width + textSettings.offsetX
+      const textY = textSettings.offsetY
+
+      // Draw name
+      ctx.fillStyle = '#000000'
+      ctx.font = `bold ${textSettings.nameFontSize}px Arial`
+      ctx.textAlign = 'right'
+      ctx.fillText('Danh Trình', textX, textY)
+
+      // Draw STT
+      ctx.font = `bold ${textSettings.sttFontSize}px Arial`
+      ctx.fillText('STT: 1', textX, textY + 50)
+    }
+  }
 
   const saveSettings = () => {
     localStorage.setItem('textSettings', JSON.stringify(textSettings))
@@ -105,7 +146,7 @@ export default function Admin() {
       
       // Draw name
       ctx.fillStyle = '#000000'
-      ctx.font = `bold ${textSettings.fontSize}px Arial`
+      ctx.font = `bold ${textSettings.nameFontSize}px Arial`
       ctx.textAlign = 'right'
       
       const name = sub.name
@@ -121,10 +162,12 @@ export default function Admin() {
       
       ctx.fillText(line1, textX, textY)
       if (line2) {
-        ctx.fillText(line2, textX, textY + 40)
-        ctx.fillText(`STT: ${index + 1}`, textX, textY + 90)
+        ctx.fillText(line2, textX, textY + (textSettings.nameFontSize * 1.2))
+        ctx.font = `bold ${textSettings.sttFontSize}px Arial`
+        ctx.fillText(`STT: ${index + 1}`, textX, textY + (textSettings.nameFontSize * 2.4))
       } else {
-        ctx.fillText(`STT: ${index + 1}`, textX, textY + 50)
+        ctx.font = `bold ${textSettings.sttFontSize}px Arial`
+        ctx.fillText(`STT: ${index + 1}`, textX, textY + (textSettings.nameFontSize * 1.2))
       }
       
       // Download
@@ -181,37 +224,55 @@ export default function Admin() {
 
       {showSettings && (
         <div className="settings-panel">
-          <h3>Cài đặt vị trí chữ</h3>
-          <div className="settings-group">
-            <label>Vị trí ngang (X): {textSettings.offsetX}</label>
-            <input 
-              type="range" 
-              min="-300" 
-              max="0" 
-              value={textSettings.offsetX}
-              onChange={(e) => setTextSettings({...textSettings, offsetX: parseInt(e.target.value)})}
-            />
+          <h3>Cài đặt vị trí chữ - Xem trước ảnh bên dưới</h3>
+          
+          <div className="preview-container">
+            <canvas ref={canvasRef} className="preview-canvas"></canvas>
           </div>
-          <div className="settings-group">
-            <label>Vị trí dọc từ trên (Y): {textSettings.offsetY}px</label>
-            <input 
-              type="range" 
-              min="50" 
-              max="400" 
-              value={textSettings.offsetY}
-              onChange={(e) => setTextSettings({...textSettings, offsetY: parseInt(e.target.value)})}
-            />
+
+          <div className="settings-grid">
+            <div className="settings-group">
+              <label>Vị trí ngang (X): {textSettings.offsetX}</label>
+              <input 
+                type="range" 
+                min="-300" 
+                max="0" 
+                value={textSettings.offsetX}
+                onChange={(e) => setTextSettings({...textSettings, offsetX: parseInt(e.target.value)})}
+              />
+            </div>
+            <div className="settings-group">
+              <label>Vị trí dọc (Y): {textSettings.offsetY}px</label>
+              <input 
+                type="range" 
+                min="50" 
+                max="400" 
+                value={textSettings.offsetY}
+                onChange={(e) => setTextSettings({...textSettings, offsetY: parseInt(e.target.value)})}
+              />
+            </div>
+            <div className="settings-group">
+              <label>Kích thước chữ - Tên: {textSettings.nameFontSize}px</label>
+              <input 
+                type="range" 
+                min="16" 
+                max="64" 
+                value={textSettings.nameFontSize}
+                onChange={(e) => setTextSettings({...textSettings, nameFontSize: parseInt(e.target.value)})}
+              />
+            </div>
+            <div className="settings-group">
+              <label>Kích thước chữ - STT: {textSettings.sttFontSize}px</label>
+              <input 
+                type="range" 
+                min="16" 
+                max="64" 
+                value={textSettings.sttFontSize}
+                onChange={(e) => setTextSettings({...textSettings, sttFontSize: parseInt(e.target.value)})}
+              />
+            </div>
           </div>
-          <div className="settings-group">
-            <label>Kích thước chữ: {textSettings.fontSize}px</label>
-            <input 
-              type="range" 
-              min="16" 
-              max="64" 
-              value={textSettings.fontSize}
-              onChange={(e) => setTextSettings({...textSettings, fontSize: parseInt(e.target.value)})}
-            />
-          </div>
+
           <button className="btn-save-settings" onClick={saveSettings}>
             💾 Lưu cài đặt
           </button>
